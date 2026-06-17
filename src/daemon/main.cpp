@@ -27,8 +27,7 @@ void configureDaemonAuth(const std::string &token)
     if (envFile.is_open())
     {
         envFile << "DAEMON_TOKEN=" << token << "\n";
-        // NOTE: Change this to your Vercel URL once deployed!
-        envFile << "NEXT_API_URL=http://127.0.0.1:3000\n";
+        envFile << "NEXT_API_URL=https://mydrive-vault.vercel.app\n";
         envFile.close();
         std::cout << "[System] ✓ Authentication token saved securely to " << envPath << "\n";
         std::cout << "[System] You can now start the daemon normally using ./mydrived\n";

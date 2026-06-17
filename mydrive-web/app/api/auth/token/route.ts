@@ -3,7 +3,6 @@ import { query } from '@/lib/db';
 import { cookies } from 'next/headers';
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
-
 export async function POST() {
   try {
     const cookieStore = await cookies();
@@ -17,7 +16,13 @@ export async function POST() {
     const rawToken = 'mdrive_sk_' + crypto.randomBytes(24).toString('hex');
     const tokenHash = crypto.createHash('sha256').update(rawToken).digest('hex');
 
-    // Save the hashed variant to the database linked to this user
+    // SECURITY PATCH: Wipe out any existing keys for this specific device
+    await query(
+      `DELETE FROM device_tokens WHERE user_id = $1 AND device_name = $2`,
+      [userId, 'Linux Desktop Daemon']
+    );
+
+    // Insert the brand new, solitary key
     await query(
       `INSERT INTO device_tokens (user_id, token_hash, device_name) VALUES ($1, $2, $3)`,
       [userId, tokenHash, 'Linux Desktop Daemon']
