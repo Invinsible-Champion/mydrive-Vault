@@ -1,9 +1,10 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 
-export default function LoginPage() {
+// 1. We renamed this from 'export default function LoginPage' to just 'function LoginContent'
+function LoginContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [form, setForm] = useState({ email: '', password: '' });
@@ -104,5 +105,14 @@ export default function LoginPage() {
         </p>
       </div>
     </div>
+  );
+}
+
+// 2. We created a new default export that wraps everything in <Suspense>
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-slate-900 flex items-center justify-center text-indigo-400 font-mono">Loading secure vault...</div>}>
+      <LoginContent />
+    </Suspense>
   );
 }
