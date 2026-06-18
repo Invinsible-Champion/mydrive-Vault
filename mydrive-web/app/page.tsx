@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-
+import Link from 'next/link'
 type Breadcrumb = { id: string | null; name: string };
 
 export default function Dashboard() {
@@ -72,6 +72,7 @@ export default function Dashboard() {
 
       {/* Secure Top Navigation Bar */}
       <header className="relative z-10 bg-slate-950/50 backdrop-blur-xl border-b border-slate-800/80 p-4 flex items-center justify-between shadow-2xl">
+        
         <div className="flex items-center gap-3 pl-4 max-w-6xl mx-auto w-full">
           <div className="flex items-center gap-3 flex-1">
             <div className="p-2 bg-indigo-500/20 rounded-lg border border-indigo-500/30">
@@ -79,6 +80,15 @@ export default function Dashboard() {
             </div>
             <h1 className="font-extrabold text-xl tracking-tight bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">myDrive Vault</h1>
           </div>
+          <Link 
+  href="/help" 
+  className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-800/50 text-slate-300 hover:bg-slate-700/50 hover:text-white border border-slate-700/50 transition-all text-sm font-medium"
+>
+  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+  </svg>
+  Setup Guide
+</Link>
           
           <button 
             onClick={handleLogout}
@@ -89,6 +99,7 @@ export default function Dashboard() {
           </button>
         </div>
       </header>
+      
 
       <div className="max-w-6xl mx-auto px-4 relative z-10">
         

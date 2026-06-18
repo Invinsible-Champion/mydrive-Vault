@@ -80,3 +80,33 @@ Thumbs.db
 *.swo
 Claude.md 
 Agents.md
+# =========================
+# C++ & CMake Build Artifacts
+# =========================
+build/
+CMakeCache.txt
+CMakeFiles/
+Makefile
+cmake_install.cmake
+*.o
+*.out
+
+# =========================
+# Debian Packaging & Binaries
+# =========================
+mydrive-vault_*/
+*.deb
+
+# =========================
+# Node & Next.js (Redundancy Check)
+# =========================
+node_modules/
+.next/
+npm-debug.log
+
+# =========================
+# Security / Local Configs
+# =========================
+.env
+.env.*
+!.env.example

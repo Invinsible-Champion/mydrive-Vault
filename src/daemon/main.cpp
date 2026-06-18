@@ -20,7 +20,6 @@ void configureDaemonAuth(const std::string &token)
     std::string configDir = homeDir + "/.config/mydrive";
     std::string envPath = configDir + "/.env";
 
-    // Create the hidden directory if it doesn't exist
     std::filesystem::create_directories(configDir);
 
     std::ofstream envFile(envPath);
