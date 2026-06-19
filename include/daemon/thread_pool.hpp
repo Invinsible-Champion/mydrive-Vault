@@ -52,8 +52,6 @@ private:
                 taskQueue.pop();
             }
 
-            cout << "[Worker " << this_thread::get_id() << "] Picked up chunk: " << task.chunk.hash.substr(0, 8) << endl;
-
             // 1. Capture the success status from the Uploader
             bool success = Uploader::processChunk(task.chunk, task.localPath, task.cloudPath);
 

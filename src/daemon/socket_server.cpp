@@ -21,7 +21,6 @@ SocketServer::SocketServer(const string &path, function<string(const string &)> 
     listen(serverFd, 5);
 
     listenerThread = thread(&SocketServer::listenLoop, this);
-    cout << "[SocketServer] Listening for CLI commands on " << socketPath << "\n";
 }
 
 SocketServer::~SocketServer()
@@ -47,8 +46,6 @@ void SocketServer::listenLoop()
         if (bytesRead > 0)
         {
             string command(buffer);
-            cout << "[SocketServer] Received command: " << command << "\n";
-
             string response = onCommandReceived(command);
 
             write(clientFd, response.c_str(), response.length());

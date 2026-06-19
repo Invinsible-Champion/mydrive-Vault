@@ -59,10 +59,6 @@ int main(int argc, char *argv[])
 
     char responseBuffer[1024] = {0};
     int bytesRead = read(sockFd, responseBuffer, sizeof(responseBuffer) - 1);
-    if (bytesRead > 0)
-    {
-        cout << responseBuffer << "\n";
-    }
 
     close(sockFd);
     return 0;

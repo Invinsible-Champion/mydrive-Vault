@@ -45,10 +45,6 @@ vector<ChunkInfo> Chunker::processFile(const string &filepath)
         string chunkHash = HashUtils::calculateSHA256(chunkStart, currentChunkSize);
 
         chunks.push_back({chunkIndex, offset, currentChunkSize, chunkHash});
-
-        cout << "[Chunker] Processed Chunk " << chunkIndex
-             << " | Hash: " << chunkHash.substr(0, 8) << "...\n";
-
         offset += currentChunkSize;
         chunkIndex++;
     }

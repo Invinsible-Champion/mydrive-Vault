@@ -36,7 +36,6 @@ void Debouncer::processLoop()
             if (timeSinceLastEvent >= debounceDelay)
             {
                 string settledFile = it->first;
-                cout << "[Debouncer] File settled and ready for processing: " << settledFile << "\n";
                 lock.unlock();
                 onFileSettled(settledFile);
                 lock.lock();

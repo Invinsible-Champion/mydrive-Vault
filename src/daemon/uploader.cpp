@@ -19,7 +19,6 @@ bool Uploader::uploadData(const std::string &url, const char *data, size_t size,
     if (!curl)
         return false;
 
-    // FETCH THE NEW SECURE TOKEN
     const char *daemonToken = getenv("DAEMON_TOKEN");
     if (!daemonToken)
     {
@@ -104,8 +103,6 @@ bool Uploader::processChunk(const ChunkInfo &chunk, const std::string &localPath
             return false;
         }
 
-        std::cout << "[Uploader] Transmitting chunk " << chunk.hash.substr(0, 8) << " to API..." << std::endl;
-
         bool success = uploadData(url, buffer, chunk.length, cloudPath);
         delete[] buffer;
 
@@ -152,11 +149,8 @@ bool Uploader::deleteFile(const std::string &cloudPath)
     curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
     curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
 
-    // Set HTTP method to DELETE
     curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "DELETE");
     curl_easy_setopt(curl, CURLOPT_NOSIGNAL, 1L);
-
-    std::cout << "[Uploader] Requesting cloud deletion for: " << cloudPath << std::endl;
 
     CURLcode res = curl_easy_perform(curl);
     long http_code = 0;
