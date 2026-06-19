@@ -1,6 +1,6 @@
 <div align="center">
   
-# ☁️ myDrive Vault
+# myDrive Vault
 
 **A high-performance, self-hosted, secure cloud synchronization ecosystem.**
 
@@ -15,7 +15,7 @@
 
 ---
 
-## 📖 Project Overview
+## Project Overview
 
 **myDrive Vault** is designed as an ultra-efficient cloud synchronization platform. The system is strategically split into a **low-footprint C++ local core** for immediate filesystem interaction and a **containerized, resilient cloud-native background worker tier** for heavy processing. 
 
@@ -26,7 +26,7 @@ The architecture strictly adheres to a decoupling pattern, optimizing for:
 
 ---
 
-## 🏗️ System Topology
+## System Topology
 
 The platform operates across three distinct computational layers:
 
@@ -53,9 +53,9 @@ graph LR
 
 ---
 
-## 🔍 Component Deep Dive
+## Component Deep Dive
 
-### 💻 A. The Local C++ Core Engine (`mydrived` & `mydrive`)
+### A. The Local C++ Core Engine (`mydrived` & `mydrive`)
 
 Built natively for Linux systems (highly optimized for Debian-based distributions like Pop!_OS and Ubuntu), the local core handles all foundational file mechanics with zero bloat.
 
@@ -64,7 +64,7 @@ Built natively for Linux systems (highly optimized for Debian-based distribution
 - **Supported Local Commands**:
   - `mydrived --auth <key>`: Extracts, validates, and provisions localized environment variables securely under `~/.config/mydrive/.env`.
 
-### 🌩️ B. The Cloud Compute Worker Layer (`mydrive-worker`)
+### B. The Cloud Compute Worker Layer (`mydrive-worker`)
 
 The execution backend tackles highly asynchronous, compute-intensive operations, decoupled completely from the user's local machine.
 
@@ -77,7 +77,7 @@ The execution backend tackles highly asynchronous, compute-intensive operations,
 
 ---
 
-## 🔄 Data & Control Flow Pipeline
+## Data & Control Flow Pipeline
 
 When a local file is altered, myDrive Vault executes a seamless, multi-stage ingestion pipeline.
 
@@ -116,10 +116,56 @@ sequenceDiagram
 
 ---
 
-## ⚙️ Key Engineering Implementations
+## Key Engineering Implementations
 
 - **Transient Network Error Mitigation**: Automatic socket unlinking (`unlink()`) prevents deadlocks stemming from un-graceful daemon crashes, ensuring smooth restarts.
 - **Resilient Worker Architecture**: The RabbitMQ worker handles transient connection drops gracefully. By intentionally triggering process failures (`process.exit(1)`), it correctly leverages container auto-restart policies (Docker/Kubernetes) to seamlessly recover without manual intervention.
+
+---
+
+## Detailed Setup Guidelines
+
+Follow these exact steps to initialize the local C++ engine, authenticate your machine, and bind your local directory to the cloud worker pipeline.
+
+### Step 1: Install the Daemon
+Ensure any previous ghost processes are terminated, then install the compiled Debian package natively into your Linux environment.
+
+```bash
+# Terminate old instances if updating
+killall mydrived 2>/dev/null || true
+
+# Install the package natively
+sudo dpkg -i mydrive-vault_1.0.0_amd64.deb
+```
+
+### Step 2: Authenticate the Machine
+Before the daemon can communicate with the cloud worker, you must provision your secure environment variables. 
+
+```bash
+# Replace <YOUR_API_KEY> with your actual key
+mydrived --auth <YOUR_API_KEY>
+```
+
+### Step 3: Define Your Vault Directory
+Create the local folder on your filesystem that you want the engine to continuously monitor and sync.
+
+```bash
+mkdir -p ~/Documents/mydrive_sync
+```
+
+### Step 4: Ignite the Engine
+Attach the background daemon directly to your sync folder. The engine will instantly scan the directory, calculate file hashes, and spin up the multi-threaded inotify watchers.
+
+```bash
+# Run the daemon directly against your target path
+mydrived ~/Documents/mydrive_sync/
+```
+
+> **Pro-Tip for 24/7 Background Execution:** If you want to detach the process from your terminal so it runs silently in the background even when you close the window, wrap the execution in `nohup`:
+
+```bash
+nohup mydrived ~/Documents/mydrive_sync/ > ~/.config/mydrive/daemon.log 2>&1 &
+```
 
 ---
 <div align="center">
